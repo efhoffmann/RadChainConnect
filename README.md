@@ -47,7 +47,13 @@
 <h4 align="center">Thanks for your visit!</h4>
 
 <p align="center">
-  Eduardo Hoffmann
+  Eduardo Hoffmann  
+  </p>
+  <p align="center">
+  Caciano Machado  
+    </p>
+  <p align="center">
+  Carla Merkle Westphall
 </p>
 
 ___
