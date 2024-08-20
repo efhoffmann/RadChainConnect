@@ -1,0 +1,239 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.espaco {
+    margin-top: 15px;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin: 10px 0 5px;
+}
+
+input {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+   
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    
+    background-color: #2980b9;
+}
+
+#output {
+    max-width: 100%;
+    overflow-wrap: break-word; 
+    white-space: pre-wrap; 
+    background-color: #f8f8f8;
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    margin-top: 20px; 
+}
+
+
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+
+
+.container {
+    max-width: 600px; 
+    margin: auto; 
+    padding: 20px; 
+    background-color: white; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px; 
+    text-align: center; 
+}
+
+
+
+
+.brasao {
+    width: 50px; 
+    height: auto; 
+    vertical-align: middle; 
+    margin-right: 10px; 
+}
+
+
+.title-container {
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+}
+
+
+h1 {
+    margin: 0; 
+}
+
+
+button {
+    padding: 10px 20px; 
+    margin: 15px; 
+    color: white; 
+    background-color: #3498db; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+}
+
+button:hover {
+    background-color: #2980b9; 
+}
+
+
+.container {
+    max-width: 600px; 
+    margin: auto; 
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; 
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+p {
+    font-size: 18px; 
+    color: #34495e; 
+}
+
+.button {
+    display: inline-block; 
+    padding: 10px 20px; 
+    margin: 15px; 
+    color: white;
+    background-color: #3498db; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    transition: background-color 0.3s ease; 
+}
+
+.button:hover {
+    background-color: #2980b9; 
+}
+
+.brasao {
+    width: 150px; 
+    height: auto; 
+    margin-bottom: 20px; 
+}
+
+
+body {
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+
+        #didOutput {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: none; 
+            max-width: 100%; 
+            overflow-x: auto; 
+            
+        }
+
+        #didTitle {
+            display: none; 
+            margin-top: 20px;
+            text-align: center; 
+        }
+
+        #didContent {
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+        }
+
+
+
+
+
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+    
+        #didOutput {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: none; 
+            max-width: 100%; 
+            overflow-x: auto; 
+            
+        }
+    
+        #didTitle {
+            display: none; 
+            margin-top: 20px;
+            text-align: center;
+        }
+    
+        #downloadPrivateKey {
+            display: none;
+            margin-top: 20px; 
+            padding: 10px 225px; 
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 12px; 
+        }
+    
+        #downloadPrivateKey:hover {
+            background-color: #0056b3; 
+        }
+    
+        #didContent {
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+        }
+
+        

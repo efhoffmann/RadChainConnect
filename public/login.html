@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="icon" href="/images/under.jpg" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <style>
+   
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-container">
+            <img src="/images/ufsc.png" class="brasao"> 
+            <h1>DID Login</h1>
+        </div>
+        <form id="credentialForm">
+
+    <label for="did">DID:</label>
+    <input type="text" id="did" placeholder="did:ufsc:..." required>
+    <button id="loadDID">Upload DID</button>
+    <button id="home" type="button" class="espaco">Home</button>
+</form>
+
+<div style="text-align:center; margin-top: 20px;">
+    <img src="/images/under.jpg" alt="Construction Icon" style="width: 20px; vertical-align: middle; margin-right: 5px;">
+    <small>Under Construction</small>
+</div>
+    <script>
+        let web3;
+        const contractAddress = '0x749A03370FFF8d4f8c760671d2A3329B72367DCd'; // Replace with the address on your contract
+        const contractABI = [ //Replace with the ABI from your contract
+            {"inputs": [{"internalType": "string","name": "","type": "string"}],"name": "degrees","outputs": [{"internalType": "string","name": "id","type": "string"},{"internalType": "string","name": "degreeType","type": "string"},{"internalType": "string","name": "degreeName","type": "string"},{"internalType": "string","name": "signature","type": "string"}],"stateMutability": "view","type": "function","constant": true},
+            {"inputs": [{"internalType": "string","name": "_id","type": "string"},{"internalType": "string","name": "_degreeType","type": "string"},{"internalType": "string","name": "_degreeName","type": "string"},{"internalType": "string","name": "_signature","type": "string"}],"name": "storeDegree","outputs": [],"stateMutability": "nonpayable","type": "function"},
+            {"inputs": [{"internalType": "string","name": "_id","type": "string"}],"name": "getDID","outputs": [{"internalType": "string","name": "","type": "string"},{"internalType": "string","name": "","type": "string"}],"stateMutability": "view","type": "function","constant": true}
+        ];
+
+        let returnedDid = "";
+        let signatu = "";
+        let inputPrivateKey = "";
+        let did = "";
+
+        document.getElementById('home').onclick = function(){
+            window.location.href='index.html';
+        }
+
+        if (typeof window.ethereum !== 'undefined') {
+            web3 = new Web3(window.ethereum);
+            window.ethereum.request({ method: 'eth_requestAccounts' });
+        } else {
+            alert('Please install MetaMask to use this application.');
+        }
+
+        const didStorageContract = new web3.eth.Contract(contractABI, contractAddress);
+
+        document.getElementById('loadDID').onclick = async function () {
+            const did = document.getElementById('did').value;
+
+            if (!did) {
+                alert("Please enter a DID.");
+                return;
+            }
+
+            try {
+               
+                const didDocument = await didStorageContract.methods.getDID(did).call({ gas: 30000000000 });
+                returnedDid = didDocument[0];
+                signatu = didDocument[1];
+
+                if (returnedDid) {
+                    alert(`DID found: ${returnedDid} - Signature: ${signatu}`);
+                    window.selectedPublicKey = returnedDid; 
+                    window.selectedSignatu = signatu;
+                } else {
+                    alert('DID not found.');
+                }
+            } catch (error) {
+                alert('Error when searching for DID.');
+               
+            }
+        }
+
+        document.getElementById('login').onclick = async function () {
+            const did = document.getElementById('did').value;
+            const privateKeyInput = document.getElementById('privateKeyInput').files[0];
+
+                try {
+                    const signatureInput = await signMessage(inputPrivateKey, did);
+                    if (signatureInput === signatu) {
+                        window.location.href = 'index3.html';
+                    } else {
+                        alert("Error when logging in. Try again");    
+                    }
+                } catch (error) {
+                    alert('Error processing login.');
+                }
+            }
+
+            reader.readAsText(privateKeyInput);
+        
+
+        
+        async function signMessage(inputPrivateKey, did) {
+            const signature = await web3.eth.accounts.sign(did, inputPrivateKey); 
+            return signature.signature; 
+        }
+    </script>
+</body>
+</html>

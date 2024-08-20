@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate DID Document</title>
+    <link rel="icon" href="/images/ufsc.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-container">
+            <img src="/images/ufsc.png" class="brasao"> 
+            <h1>Student, generate your Verifiable Credential here</h1>
+        </div>
+        <form id="credentialForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required><br><br>
+        
+        <label for="dob">Date of birth:</label>
+        <input type="date" id="dob" required><br><br>
+        
+        <label for="course">Course:</label>
+        <select id="course" required>
+            <option value="">Select a course</option>
+            <option value="Bachelor of Software Engineering">Bachelor of Software Engineering</option>
+            <option value="Bachelor of Computer Science">Bachelor of Computer Science</option>
+            <option value="Bachelor of Administration">Bachelor of Administration</option>
+            <option value="Bachelor of Law">Bachelor of Law</option>
+            <option value="Medicine">Medicine</option>
+           
+        </select><br><br>
+        
+        <button type="submit">Generate DID Document</button>
+        <button id="home" type="button" class="espaco">Home</button>
+        
+       
+    </form>
+ 
+    <div id="didOutput">
+        <h2> DID Document:</h2>
+        <pre id="didContent"></pre> 
+    </div>
+       
+    <script>
+        const contractAddress = '0x749A03370FFF8d4f8c760671d2A3329B72367DCd'; // Replace with the address on your contract
+        const contractABI =  [ //Replace with the ABI from your contract
+            {"inputs": [{"internalType": "string","name": "","type": "string"}],"name": "degrees","outputs": [{"internalType": "string","name": "id","type": "string"},{"internalType": "string","name": "degreeType","type": "string"},{"internalType": "string","name": "degreeName","type": "string"},{"internalType": "string","name": "signature","type": "string"}],"stateMutability": "view","type": "function","constant": true},
+            {"inputs": [{"internalType": "string","name": "_id","type": "string"},{"internalType": "string","name": "_degreeType","type": "string"},{"internalType": "string","name": "_degreeName","type": "string"},{"internalType": "string","name": "_signature","type": "string"}],"name": "storeDegree","outputs": [],"stateMutability": "nonpayable","type": "function"},
+            {"inputs": [{"internalType": "string","name": "_id","type": "string"}],"name": "getDID","outputs": [{"internalType": "string","name": "","type": "string"},{"internalType": "string","name": "","type": "string"}],"stateMutability": "view","type": "function","constant": true}
+        ];
+
+        let userPrivateKey = '';
+
+        if (typeof window.ethereum !== 'undefined') {
+            const web3 = new Web3(window.ethereum);
+
+            async function init() {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                const accounts = await web3.eth.getAccounts();
+                const { privateKey, publicKey } = generateKeyPair();
+                userPrivateKey = privateKey;
+                window.contract = new web3.eth.Contract(contractABI, contractAddress);
+            }
+
+            init();
+
+            document.getElementById('home').onclick = function(){
+            window.location.href='index.html';
+        }
+
+            document.getElementById('credentialForm').onsubmit = async function (event) {
+                event.preventDefault();
+                
+                const name = document.getElementById('name').value;
+                const dob = document.getElementById('dob').value;
+                const course = document.getElementById('course').value;
+
+                const id = `did:example:${web3.utils.randomHex(16)}`;
+                const degreeType = "degree";
+                const degreeName = course; 
+                const issuanceDate = new Date().toISOString();
+                const expirationDate = new Date(new Date().setFullYear(new Date().getFullYear() + 10)).toISOString(); // Expira em 10 anos
+                const issuerName = "Federal University of Santa Catarina";
+
+                const signature = web3.utils.soliditySha3(id + userPrivateKey);
+                const didDocument = {
+                    "@context": [
+                        "https://www.w3.org/2018/credentials/v1",
+                        {
+                            "degree": "https://schema.org/degree",
+                            "University": "https://schema.org/ufsc_master"
+                        }
+                    ],
+                    "id": id,
+                    "type": [
+                        "VerifiableCredential",
+                        "UniversityDegree"
+                    ],
+                    "issuer": {
+                        "id": `did:example:${issuerName.replace(/\s/g, '').toLowerCase()}`, 
+                        "name": issuerName
+                    },
+                    "issuanceDate": issuanceDate,
+                    "expirationDate": expirationDate,
+                    "credentialSubject": {
+                        "id": `did:example:${web3.utils.randomHex(16)}`, 
+                        "name": name,
+                        "birthdate": dob,
+                        "degree": {
+                            "type": degreeType,
+                            "name": degreeName,
+                            "dateAwarded": issuanceDate
+                        }
+                    },
+                    "proof": {
+                        "type": "RSA_SHA256",
+                        "created": new Date().toISOString(),
+                        "proofPurpose": "assertionMethod",
+                        "verificationMethod": `did:example:${signature}`, 
+                        "signature": signature 
+                    }
+                };
+
+                await window.contract.methods.storeDegree(id, degreeType, degreeName, signature).send({ from: (await web3.eth.getAccounts())[0] });
+                
+                document.getElementById('didContent').innerText = JSON.stringify(didDocument, null, 4);
+                document.getElementById('didOutput').style.display = 'block'; 
+                document.getElementById('downloadPrivateKey').style.display = 'block';
+                alert('DID document successfully generated!');   
+            };
+
+        } else {
+            alert('Please install Metamask!');
+        }
+
+        function generateKeyPair() {
+            const privateKey = '0x' + Array.from(crypto.getRandomValues(new Uint8Array(32)), byte => byte.toString(16).padStart(2, '0')).join('');
+            const publicKey = '0x' + sha256(privateKey);
+            return { privateKey, publicKey };
+        }
+    </script>
+    </div>
+</body>
+</html>
