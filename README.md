@@ -35,12 +35,13 @@
 
 - ## Register Screen
 
-![3](https://github.com/user-attachments/assets/5b94f3b6-ff0d-45d1-8858-c0ef712a1149)
-
+![4](https://github.com/user-attachments/assets/df50123b-c0d3-48ed-af71-41a8f967bea5)
 
 - ## Login Screen
 
-![4](https://github.com/user-attachments/assets/df50123b-c0d3-48ed-af71-41a8f967bea5)
+
+![3](https://github.com/user-attachments/assets/5b94f3b6-ff0d-45d1-8858-c0ef712a1149)
+
 
 ---
 <h4 align="center">Thanks for your visit!</h4>
